@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة المنظومة الشمسية للمحركات الحثية</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .calculator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .input-with-unit {
+            display: flex;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .input-with-unit select {
+            width: auto;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: none;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .tips-section {
+            background-color: #e8f4fc;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .tips-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .tips-section ul {
+            padding-right: 20px;
+        }
+
+        .tips-section li {
+            margin-bottom: 8px;
+        }
+
+        .motor-select, .panel-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .motor-select:focus, .panel-select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .motor-data, .panel-data {
+            display: none;
+        }
+
+        .motor-select:not(:empty) ~ .motor-data,
+        .panel-select:not(:empty) ~ .panel-data {
+            display: block;
+        }
+
+        input:disabled {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .calculator {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>حاسبة المنظومة الشمسية للمحركات الحثية</h1>
+            <p>اختر المحرك ومواصفات الطاقة الشمسية لحساب مكونات النظام المطلوبة</p>
+        </header>
+
+        <div class="calculator">
+            <div class="input-section">
+                <h2>بيانات المحرك</h2>
+                <div class="form-group">
+                    <label for="motorSelect">اختر نموذج المحرك:</label>
+                    <select id="motorSelect" class="motor-select">
+                        <option value="">-- اختر المحرك --</option>
+                        <option value="0.5" data-voltage="220" data-efficiency="75" data-pf="0.8">0.5 حصان (220V)</option>
+                        <option value="1" data-voltage="220" data-efficiency="78" data-pf="0.82">1 حصان (220V)</option>
+                        <option value="2" data-voltage="380" data-efficiency="82" data-pf="0.85">2 حصان (380V)</option>
+                        <option value="3" data-voltage="380" data-efficiency="84" data-pf="0.85">3 حصان (380V)</option>
+                        <option value="5" data-voltage="380" data-efficiency="85" data-pf="0.86">5 حصان (380V)</option>
+                        <option value="7.5" data-voltage="380" data-efficiency="86" data-pf="0.87">7.5 حصان (380V)</option>
+                        <option value="10" data-voltage="380" data-efficiency="87" data-pf="0.88">10 حصان (380V)</option>
+                        <option value="15" data-voltage="380" data-efficiency="88" data-pf="0.89">15 حصان (380V)</option>
+                        <option value="20" data-voltage="380" data-efficiency="89" data-pf="0.9">20 حصان (380V)</option>
+                        <option value="custom">مخصص (أدخل البيانات يدوياً)</option>
+                    </select>
+                </div>
+
+                <div class="form-group motor-data">
+                    <label for="motorPower">قدرة المحرك (حصان):</label>
+                    <input type="number" id="motorPower" min="0.1" step="0.1" value="5" disabled>
+                </div>
+
+                <div class="form-group motor-data">
+                    <label for="voltage">الجهد (فولت):</label>
+                    <input type="number" id="voltage" min="12" value="380" disabled>
+                </div>
+
+                <div class="form-group motor-data">
+                    <label for="efficiency">كفاءة المحرك (%):</label>
+                    <input type="number" id="efficiency" min="50" max="100" value="85" disabled>
+                </div>
+
+                <div class="form-group motor-data">
+                    <label for="pf">معامل القدرة (PF):</label>
+                    <input type="number" id="pf" min="0.1" max="1" step="0.01" value="0.85" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="operatingHours">ساعات التشغيل اليومية:</label>
+                    <input type="number" id="operatingHours" min="1" max="24" value="5">
+                </div>
+
+                <h2>بيانات الطاقة الشمسية</h2>
+                <div class="form-group">
+                    <label for="panelSelect">اختر نوع اللوح الشمسي:</label>
+                    <select id="panelSelect" class="panel-select">
+                        <option value="">-- اختر اللوح الشمسي --</option>
+                        <option value="250" data-sunhours="5">لوح 250 واط (صغير)</option>
+                        <option value="330" data-sunhours="5" selected>لوح 330 واط (متوسط)</option>
+                        <option value="400" data-sunhours="5">لوح 400 واط (كبير)</option>
+                        <option value="500" data-sunhours="5">لوح 500 واط (كبير جداً)</option>
+                        <option value="custom">مخصص (أدخل البيانات يدوياً)</option>
+                    </select>
+                </div>
+
+                <div class="form-group panel-data">
+                    <label for="panelWattage">قدرة اللوح الشمسي (واط):</label>
+                    <input type="number" id="panelWattage" min="100" step="10" value="330" disabled>
+                </div>
+
+                <div class="form-group panel-data">
+                    <label for="sunHours">ساعات الذروة الشمسية (في موقعك):</label>
+                    <input type="number" id="sunHours" min="1" max="8" step="0.5" value="5" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="batteryDays">أيام احتياط البطارية (اختياري):</label>
+                    <input type="number" id="batteryDays" min="0" value="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="batteryVoltage">جهد نظام البطارية (فولت):</label>
+                    <select id="batteryVoltage">
+                        <option value="12">12V</option>
+                        <option value="24">24V</option>
+                        <option value="48" selected>48V</option>
+                    </select>
+                </div>
+
+                <button id="calculateBtn">احسب المنظومة</button>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>نتائج الحساب</h2>
+                <div class="result-item">
+                    <span class="result-label">الطاقة المطلوبة يومياً:</span>
+                    <span class="result-value" id="dailyEnergy">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">التيار الاسمي للمحرك:</span>
+                    <span class="result-value" id="ratedCurrent">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">تيار البدء (تقريبي):</span>
+                    <span class="result-value" id="startingCurrent">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">عدد الألواح الشمسية:</span>
+                    <span class="result-value" id="panelsCount">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">سعة البطارية المطلوبة:</span>
+                    <span class="result-value" id="batteryCapacity">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">قدرة العاكس المطلوبة:</span>
+                    <span class="result-value" id="inverterSize">--</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">ملاحظات:</span>
+                    <span class="result-value" id="notes">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h3>نصائح لتحسين النظام</h3>
+            <ul>
+                <li>استخدم عاكساً (Inverter) من نوع Pure Sine Wave للمحركات الحثية</li>
+                <li>يفضل استخدام VFD للتحكم في سرعة المحرك وتقليل تيار البدء</li>
+                <li>اختر ألواحاً شمسية بكفاءة عالية (أكثر من 18%) لتقليل المساحة</li>
+                <li>للمحركات الكبيرة (>5 كيلوواط)، يفضل استخدام بدء نجمي-مثلث لتقليل تيار البدء</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const motorSelect = document.getElementById('motorSelect');
+            const panelSelect = document.getElementById('panelSelect');
+            const motorDataInputs = document.querySelectorAll('.motor-data input');
+            const panelDataInputs = document.querySelectorAll('.panel-data input');
+            const calculateBtn = document.getElementById('calculateBtn');
+            
+            // تفعيل/تعطيل حقول إدخال بيانات المحرك عند الاختيار
+            motorSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    motorDataInputs.forEach(input => {
+                        input.disabled = false;
+                        input.value = '';
+                    });
+                } else if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    document.getElementById('motorPower').value = this.value;
+                    document.getElementById('voltage').value = selectedOption.dataset.voltage;
+                    document.getElementById('efficiency').value = selectedOption.dataset.efficiency;
+                    document.getElementById('pf').value = selectedOption.dataset.pf;
+                    
+                    motorDataInputs.forEach(input => {
+                        input.disabled = false;
+                    });
+                } else {
+                    motorDataInputs.forEach(input => {
+                        input.disabled = true;
+                        input.value = '';
+                    });
+                }
+            });
+            
+            // تفعيل/تعطيل حقول إدخال بيانات الألواح الشمسية عند الاختيار
+            panelSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    panelDataInputs.forEach(input => {
+                        input.disabled = false;
+                        input.value = '';
+                    });
+                } else if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    document.getElementById('panelWattage').value = this.value;
+                    document.getElementById('sunHours').value = selectedOption.dataset.sunhours;
+                    
+                    panelDataInputs.forEach(input => {
+                        input.disabled = false;
+                    });
+                } else {
+                    panelDataInputs.forEach(input => {
+                        input.disabled = true;
+                        input.value = '';
+                    });
+                }
+            });
+            
+            // تعيين القيم الافتراضية عند التحميل
+            motorSelect.value = '5';
+            motorSelect.dispatchEvent(new Event('change'));
+            panelSelect.value = '330';
+            panelSelect.dispatchEvent(new Event('change'));
+            
+            calculateBtn.addEventListener('click', calculateSystem);
+            
+            function calculateSystem() {
+                // الحصول على قيم المدخلات
+                const motorPower = parseFloat(document.getElementById('motorPower').value);
+                const voltage = parseFloat(document.getElementById('voltage').value);
+                const efficiency = parseFloat(document.getElementById('efficiency').value) / 100;
+                const pf = parseFloat(document.getElementById('pf').value);
+                const operatingHours = parseFloat(document.getElementById('operatingHours').value);
+                const sunHours = parseFloat(document.getElementById('sunHours').value);
+                const panelWattage = parseFloat(document.getElementById('panelWattage').value);
+                const batteryDays = parseInt(document.getElementById('batteryDays').value);
+                const batteryVoltage = parseInt(document.getElementById('batteryVoltage').value);
+                
+                // التحقق من اكتمال البيانات
+                if (!motorSelect.value || !panelSelect.value) {
+                    alert('الرجاء اختيار المحرك ونوع اللوح الشمسي');
+                    return;
+                }
+                
+                // تحويل قدرة المحرك إلى كيلوواط (1 حصان = 0.746 كيلوواط)
+                const motorPowerKW = motorPower * 0.746;
+                
+                // حساب التيار الاسمي
+                const ratedCurrent = (motorPowerKW * 1000) / (Math.sqrt(3) * voltage * pf * efficiency);
+                
+                // حساب تيار البدء (5-7 أضعاف التيار الاسمي)
+                const startingCurrent = ratedCurrent * 6;
+                
+                // حساب الطاقة اليومية المطلوبة (كيلوواط ساعة)
+                const dailyEnergy = motorPowerKW * operatingHours * 1.3; // إضافة 30% فقدان
+                
+                // حساب عدد الألواح الشمسية
+                const panelsCount = Math.ceil((dailyEnergy * 1000) / (panelWattage * sunHours));
+                
+                // حساب سعة البطارية إذا طلب المستخدم
+                let batteryCapacity = 'لا حاجة';
+                if (batteryDays > 0) {
+                    const batteryAh = (dailyEnergy * 1000 * batteryDays) / (batteryVoltage * 0.8); // 0.8 لتفريغ 80%
+                    batteryCapacity = `${Math.ceil(batteryAh)} أمبير ساعة (نظام ${batteryVoltage} فولت)`;
+                }
+                
+                // حساب قدرة العاكس المطلوبة (1.5 ضعف قدرة المحرك للتعامل مع تيار البدء)
+                const inverterSizeKW = motorPowerKW * 1.5;
+                
+                // ملاحظات إضافية
+                let notes = '';
+                if (motorPowerKW > 5) {
+                    notes = 'للمحركات الكبيرة (>5 كيلوواط)، يفضل استخدام VFD أو بدء نجمي-مثلث لتقليل تيار البدء';
+                }
+                
+                // عرض النتائج
+                document.getElementById('dailyEnergy').textContent = `${dailyEnergy.toFixed(2)} كيلوواط ساعة/يوم`;
+                document.getElementById('ratedCurrent').textContent = `${ratedCurrent.toFixed(2)} أمبير`;
+                document.getElementById('startingCurrent').textContent = `${startingCurrent.toFixed(2)} أمبير (تقريبي)`;
+                document.getElementById('panelsCount').textContent = `${panelsCount} لوح (${panelWattage} واط لكل لوح)`;
+                document.getElementById('batteryCapacity').textContent = batteryCapacity;
+                document.getElementById('inverterSize').textContent = `${inverterSizeKW.toFixed(2)} كيلوواط (يفضل Pure Sine Wave)`;
+                document.getElementById('notes').textContent = notes;
+                
+                // إظهار قسم النتائج
+                document.getElementById('resultsSection').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+  </html>
