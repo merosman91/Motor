@@ -67,21 +67,28 @@
             left: 20px;
             top: 20px;
             background: rgba(255, 255, 255, 0.2);
-            border: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
             padding: 8px 15px;
             border-radius: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            font-size: 14px;
+            justify-content: center;
             gap: 8px;
-            transition: all 0.3s;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .dark-mode-toggle:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode-toggle i {
+            font-size: 16px;
         }
 
         header h1 {
@@ -99,6 +106,10 @@
         .logo img {
             height: 50px;
             margin-left: 10px;
+            border-radius: 50%;
+            border: 2px solid white;
+            padding: 3px;
+            background: white;
         }
 
         .calculator {
@@ -279,6 +290,8 @@
             border: 1px solid var(--border-color);
             max-height: 200px;
             object-fit: contain;
+            background-color: #f5f5f5;
+            padding: 10px;
         }
 
         .connection-types {
@@ -302,6 +315,8 @@
             height: auto;
             margin-bottom: 10px;
             border-radius: 5px;
+            background-color: #f5f5f5;
+            padding: 10px;
         }
 
         .connection-type h4 {
@@ -445,12 +460,12 @@
 <body>
     <div class="container">
         <header>
-            <button class="dark-mode-toggle" id="darkModeToggle">
+            <button class="dark-mode-toggle" id="darkModeToggle" title="التبديل بين الوضع الليلي والنهاري">
                 <i class="fas fa-moon" id="darkModeIcon"></i>
                 <span id="darkModeText">الوضع الليلي</span>
             </button>
             <div class="logo">
-                <img src="https://i.imgur.com/JDYPH5E.png" alt="Solar Motor Calculator Logo" onerror="this.src='https://via.placeholder.com/50x50.png?text=MO'">
+                <img src="motor-icon.png" alt="Solar Motor Calculator Logo">
                 <h1>حاسبة المنظومة الشمسية للموتورات الحثية</h1>
             </div>
             <p>اختر الموتور ومواصفات الطاقة الشمسية لحساب مكونات النظام المطلوبة</p>
@@ -508,7 +523,7 @@
                 </div>
 
                 <div class="motor-image">
-                    <img src="https://i.imgur.com/9XmJQ6T.jpg" alt="صورة موتور حثي" id="motorImg" onerror="this.src='https://via.placeholder.com/400x200.png?text=Motor+Image'">
+                    <img src="induction-motor.jpg" alt="صورة موتور حثي" id="motorImg">
                 </div>
 
                 <div class="vfd-info">
@@ -598,7 +613,7 @@
                 <div class="connection-types">
                     <div class="connection-type">
                         <h4>توصيل الألواح الشمسية</h4>
-                        <img src="https://i.imgur.com/8XZwz9Q.png" alt="توصيل الألواح الشمسية" onerror="this.src='https://via.placeholder.com/300x150.png?text=Solar+Panel+Wiring'">
+                        <img src="solar-panels-wiring.jpg" alt="توصيل الألواح الشمسية">
                         <div class="connection-details">
                             <p><strong>التوصيل على التوالي:</strong></p>
                             <p>• الجهد الكلي = مجموع جهود الألواح</p>
@@ -617,7 +632,7 @@
                     </div>
                     <div class="connection-type">
                         <h4>توصيل البطاريات</h4>
-                        <img src="https://i.imgur.com/VvGJQ9x.png" alt="توصيل البطاريات" onerror="this.src='https://via.placeholder.com/300x150.png?text=Battery+Wiring'">
+                        <img src="batteries-wiring.jpg" alt="توصيل البطاريات">
                         <div class="connection-details">
                             <p><strong>التوصيل على التوالي:</strong></p>
                             <p>• الجهد الكلي = مجموع جهود البطاريات</p>
@@ -694,11 +709,11 @@
                 const motorPhase = selectedOption.getAttribute('data-phase');
                 
                 if (motorPhase === 'three') {
-                    motorImg.src = 'https://i.imgur.com/9XmJQ6T.jpg';
+                    motorImg.src = 'three-phase-motor.jpg';
                 } else if (motorPhase === 'single') {
-                    motorImg.src = 'https://i.imgur.com/5YjK7Wm.jpg';
+                    motorImg.src = 'single-phase-motor.jpg';
                 } else {
-                    motorImg.src = 'https://i.imgur.com/JkLm9Xf.jpg';
+                    motorImg.src = 'induction-motor.jpg';
                 }
                 
                 if (this.value === 'custom') {
