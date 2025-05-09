@@ -6,9 +6,9 @@
     <title>حاسبة المنظومة الشمسية للموتورات الحثية</title>
     <style>
         :root {
-            --primary-color: #3a7bd5; /* لون أزرق يناسب الطاقة الشمسية */
-            --secondary-color: #00d2ff; /* لون أزرق فاتح */
-            --accent-color: #f46b45; /* لون برتقالي للتحذيرات */
+            --primary-color: #3a7bd5;
+            --secondary-color: #00d2ff;
+            --accent-color: #f46b45;
             --light-color: #f8f9fa;
             --dark-color: #343a40;
             --success-color: #28a745;
@@ -69,12 +69,19 @@
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
+            padding: 8px 15px;
+            border-radius: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
             font-size: 14px;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         header h1 {
@@ -302,6 +309,16 @@
             margin-bottom: 8px;
         }
 
+        .connection-details {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .connection-details p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
         .share-section {
             display: flex;
             flex-direction: column;
@@ -429,7 +446,8 @@
     <div class="container">
         <header>
             <button class="dark-mode-toggle" id="darkModeToggle">
-                <i class="fas fa-moon"></i> الوضع الليلي
+                <i class="fas fa-moon" id="darkModeIcon"></i>
+                <span id="darkModeText">الوضع الليلي</span>
             </button>
             <div class="logo">
                 <img src="https://i.imgur.com/JDYPH5E.png" alt="Solar Motor Calculator Logo" onerror="this.src='https://via.placeholder.com/50x50.png?text=MO'">
@@ -581,16 +599,40 @@
                     <div class="connection-type">
                         <h4>توصيل الألواح الشمسية</h4>
                         <img src="https://i.imgur.com/8XZwz9Q.png" alt="توصيل الألواح الشمسية" onerror="this.src='https://via.placeholder.com/300x150.png?text=Solar+Panel+Wiring'">
-                        <p>التوالي: V<sub>total</sub> = V<sub>1</sub> + V<sub>2</sub> + ...</p>
-                        <p>التوازي: A<sub>total</sub> = A<sub>1</sub> + A<sub>2</sub> + ...</p>
-                        <p>الهجين: زيادة الجهد والتيار معاً</p>
+                        <div class="connection-details">
+                            <p><strong>التوصيل على التوالي:</strong></p>
+                            <p>• الجهد الكلي = مجموع جهود الألواح</p>
+                            <p>• التيار يبقى ثابتاً</p>
+                            <p>• مثال: لوحان 12V/5A → 24V/5A</p>
+                            
+                            <p><strong>التوصيل على التوازي:</strong></p>
+                            <p>• التيار الكلي = مجموع تيارات الألواح</p>
+                            <p>• الجهد يبقى ثابتاً</p>
+                            <p>• مثال: لوحان 12V/5A → 12V/10A</p>
+                            
+                            <p><strong>التوصيل الهجين:</strong></p>
+                            <p>• مجموعات توالي موصلة على التوازي</p>
+                            <p>• يزيد الجهد والتيار معاً</p>
+                        </div>
                     </div>
                     <div class="connection-type">
                         <h4>توصيل البطاريات</h4>
                         <img src="https://i.imgur.com/VvGJQ9x.png" alt="توصيل البطاريات" onerror="this.src='https://via.placeholder.com/300x150.png?text=Battery+Wiring'">
-                        <p>التوالي: V<sub>total</sub> = V<sub>1</sub> + V<sub>2</sub> + ...</p>
-                        <p>التوازي: Ah<sub>total</sub> = Ah<sub>1</sub> + Ah<sub>2</sub> + ...</p>
-                        <p>الهجين: زيادة الجهد والسعة معاً</p>
+                        <div class="connection-details">
+                            <p><strong>التوصيل على التوالي:</strong></p>
+                            <p>• الجهد الكلي = مجموع جهود البطاريات</p>
+                            <p>• السعة (Ah) تبقى ثابتة</p>
+                            <p>• مثال: بطاريتان 12V/100Ah → 24V/100Ah</p>
+                            
+                            <p><strong>التوصيل على التوازي:</strong></p>
+                            <p>• السعة الكلية = مجموع سعات البطاريات</p>
+                            <p>• الجهد يبقى ثابتاً</p>
+                            <p>• مثال: بطاريتان 12V/100Ah → 12V/200Ah</p>
+                            
+                            <p><strong>التوصيل الهجين:</strong></p>
+                            <p>• مجموعات توالي موصلة على التوازي</p>
+                            <p>• يزيد الجهد والسعة معاً</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -629,14 +671,20 @@
             const phaseWarning = document.getElementById('phaseWarning');
             const voltageInput = document.getElementById('voltage');
             const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            const darkModeText = document.getElementById('darkModeText');
             
             // تفعيل الوضع الليلي
             darkModeToggle.addEventListener('click', function() {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
-                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> الوضع النهاري';
+                    darkModeIcon.className = 'fas fa-sun';
+                    darkModeText.textContent = 'الوضع النهاري';
+                    darkModeToggle.title = 'التبديل إلى الوضع النهاري';
                 } else {
-                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> الوضع الليلي';
+                    darkModeIcon.className = 'fas fa-moon';
+                    darkModeText.textContent = 'الوضع الليلي';
+                    darkModeToggle.title = 'التبديل إلى الوضع الليلي';
                 }
             });
             
