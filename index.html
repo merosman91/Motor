@@ -43,12 +43,46 @@
             color: var(--text-color);
             line-height: 1.6;
             padding: 10px;
+            position: relative;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 15px;
+        }
+
+        /* زر تبديل الأوضاع الجديد */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .dark-mode-toggle:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .dark-mode-toggle i {
+            font-size: 22px;
+        }
+
+        .dark-mode .dark-mode-toggle {
+            background: var(--secondary-color);
         }
 
         header {
@@ -59,35 +93,6 @@
             color: white;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .dark-mode-toggle {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .dark-mode-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .dark-mode-toggle i {
-            font-size: 18px;
         }
 
         header h1 {
@@ -102,13 +107,9 @@
             margin-bottom: 10px;
         }
 
-        .logo img {
-            height: 50px;
+        .logo i {
+            font-size: 40px;
             margin-left: 10px;
-            border-radius: 50%;
-            border: 2px solid white;
-            padding: 3px;
-            background: white;
         }
 
         .calculator {
@@ -161,23 +162,6 @@
             border-color: var(--secondary-color);
             outline: none;
             box-shadow: 0 0 0 3px rgba(74, 137, 220, 0.2);
-        }
-
-        .input-with-unit {
-            display: flex;
-        }
-
-        .input-with-unit input {
-            flex: 1;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-
-        .input-with-unit select {
-            width: auto;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            border-left: none;
         }
 
         button {
@@ -270,27 +254,13 @@
             transition: all 0.3s;
         }
 
-        .motor-select:focus, .panel-select:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 137, 220, 0.2);
-        }
-
-        .motor-image {
+        /* أيقونة الموتور */
+        .motor-icon {
+            font-size: 80px;
+            color: var(--primary-color);
+            margin: 20px 0;
             text-align: center;
-            margin: 15px 0;
-        }
-
-        .motor-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-color);
-            max-height: 200px;
-            object-fit: contain;
-            background-color: #f5f5f5;
-            padding: 10px;
+            display: block;
         }
 
         .connection-types {
@@ -309,13 +279,15 @@
             border: 1px solid var(--border-color);
         }
 
-        .connection-type img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            background-color: #f5f5f5;
-            padding: 10px;
+        /* أيقونات التوصيل */
+        .connection-icon {
+            font-size: 60px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .connection-icon i {
+            margin: 0 5px;
         }
 
         .connection-type h4 {
@@ -457,13 +429,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- زر تبديل الأوضاع الجديد -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="تبديل الوضع الليلي/النهاري">
+        <i class="fas fa-moon" id="darkModeIcon"></i>
+    </button>
+
     <div class="container">
         <header>
-            <button class="dark-mode-toggle" id="darkModeToggle" title="التبديل بين الوضع الليلي والنهاري">
-                <i class="fas fa-moon" id="darkModeIcon"></i>
-            </button>
             <div class="logo">
-                <img src="https://cdn-icons-png.flaticon.com/512/2933/2933245.png" alt="Solar Motor Calculator Logo">
+                <i class="fas fa-solar-panel"></i>
                 <h1>حاسبة المنظومة الشمسية للموتورات الحثية</h1>
             </div>
             <p>اختر الموتور ومواصفات الطاقة الشمسية لحساب مكونات النظام المطلوبة</p>
@@ -521,7 +495,7 @@
                 </div>
 
                 <div class="motor-image">
-                    <img src="https://www.electricportal.info/wp-content/uploads/2020/03/three-phase-induction-motor.jpg" alt="صورة موتور حثي" id="motorImg">
+                    <i class="fas fa-cog motor-icon" id="motorImg"></i>
                 </div>
 
                 <div class="vfd-info">
@@ -610,41 +584,41 @@
 
                 <div class="connection-types">
                     <div class="connection-type">
+                        <div class="connection-icon">
+                            <i class="fas fa-solar-panel"></i>
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-solar-panel"></i>
+                        </div>
                         <h4>توصيل الألواح الشمسية</h4>
-                        <img src="https://www.altestore.com/static/learn/wp-content/uploads/2015/11/Solar-Panel-Wiring-Diagram-1-300x225.jpg" alt="توصيل الألواح الشمسية">
                         <div class="connection-details">
-                            <p><strong>التوصيل على التوالي:</strong></p>
+                            <p><i class="fas fa-link"></i> <strong>التوصيل على التوالي:</strong></p>
                             <p>• الجهد الكلي = مجموع جهود الألواح</p>
                             <p>• التيار يبقى ثابتاً</p>
                             <p>• مثال: لوحان 12V/5A → 24V/5A</p>
                             
-                            <p><strong>التوصيل على التوازي:</strong></p>
+                            <p><i class="fas fa-project-diagram"></i> <strong>التوصيل على التوازي:</strong></p>
                             <p>• التيار الكلي = مجموع تيارات الألواح</p>
                             <p>• الجهد يبقى ثابتاً</p>
                             <p>• مثال: لوحان 12V/5A → 12V/10A</p>
-                            
-                            <p><strong>التوصيل الهجين:</strong></p>
-                            <p>• مجموعات توالي موصلة على التوازي</p>
-                            <p>• يزيد الجهد والتيار معاً</p>
                         </div>
                     </div>
                     <div class="connection-type">
+                        <div class="connection-icon">
+                            <i class="fas fa-battery-full"></i>
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-battery-full"></i>
+                        </div>
                         <h4>توصيل البطاريات</h4>
-                        <img src="https://www.explorist.life/wp-content/uploads/2020/04/Series-vs-Parallel-Connections-1.jpg" alt="توصيل البطاريات">
                         <div class="connection-details">
-                            <p><strong>التوصيل على التوالي:</strong></p>
+                            <p><i class="fas fa-link"></i> <strong>التوصيل على التوالي:</strong></p>
                             <p>• الجهد الكلي = مجموع جهود البطاريات</p>
                             <p>• السعة (Ah) تبقى ثابتة</p>
                             <p>• مثال: بطاريتان 12V/100Ah → 24V/100Ah</p>
                             
-                            <p><strong>التوصيل على التوازي:</strong></p>
+                            <p><i class="fas fa-project-diagram"></i> <strong>التوصيل على التوازي:</strong></p>
                             <p>• السعة الكلية = مجموع سعات البطاريات</p>
                             <p>• الجهد يبقى ثابتاً</p>
                             <p>• مثال: بطاريتان 12V/100Ah → 12V/200Ah</p>
-                            
-                            <p><strong>التوصيل الهجين:</strong></p>
-                            <p>• مجموعات توالي موصلة على التوازي</p>
-                            <p>• يزيد الجهد والسعة معاً</p>
                         </div>
                     </div>
                 </div>
@@ -698,27 +672,25 @@
                 }
             });
             
-            // تحديث صورة الموتور بناءً على الاختيار
+            // تحديث أيقونة الموتور بناءً على الاختيار
             motorSelect.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 const motorPhase = selectedOption.getAttribute('data-phase');
                 
                 if (motorPhase === 'three') {
-                    motorImg.src = 'https://www.electricportal.info/wp-content/uploads/2020/03/three-phase-induction-motor.jpg';
+                    motorImg.className = 'fas fa-cogs motor-icon';
                 } else if (motorPhase === 'single') {
-                    motorImg.src = 'https://5.imimg.com/data5/SELLER/Default/2021/12/CS/KD/LE/3033603/single-phase-induction-motor-500x500.jpg';
+                    motorImg.className = 'fas fa-cog motor-icon';
                 } else {
-                    motorImg.src = 'https://www.electricportal.info/wp-content/uploads/2020/03/three-phase-induction-motor.jpg';
+                    motorImg.className = 'fas fa-motorcycle motor-icon';
                 }
                 
                 if (this.value === 'custom') {
-                    // مسح القيم عند اختيار مخصص
                     document.getElementById('motorPower').value = '';
                     document.getElementById('voltage').value = '';
                     document.getElementById('efficiency').value = '';
                     document.getElementById('pf').value = '';
                 } else if (this.value) {
-                    // تعبئة البيانات عند اختيار موتور معين
                     document.getElementById('motorPower').value = this.value;
                     document.getElementById('voltage').value = selectedOption.dataset.voltage;
                     document.getElementById('efficiency').value = selectedOption.dataset.efficiency;
@@ -763,7 +735,6 @@
             whatsappShare.addEventListener('click', shareOnWhatsApp);
             
             function calculateSystem() {
-                // الحصول على قيم المدخلات
                 const motorPower = parseFloat(document.getElementById('motorPower').value);
                 const voltage = parseFloat(document.getElementById('voltage').value);
                 const efficiency = parseFloat(document.getElementById('efficiency').value) / 100;
@@ -774,17 +745,14 @@
                 const batteryDays = parseInt(document.getElementById('batteryDays').value);
                 const batteryVoltage = parseInt(document.getElementById('batteryVoltage').value);
                 
-                // التحقق من اكتمال البيانات
                 if (!motorPower || !voltage || !efficiency || !pf || !operatingHours || !sunHours || !panelWattage) {
                     alert('الرجاء إدخال جميع البيانات المطلوبة');
                     return;
                 }
                 
-                // تحويل قدرة الموتور إلى كيلوواط (1 حصان = 0.746 كيلوواط)
                 const motorPowerKW = motorPower * 0.746;
-                const motorPowerWatt = motorPower * 746; // للعرض فقط
+                const motorPowerWatt = motorPower * 746;
                 
-                // حساب التيار الاسمي
                 let ratedCurrent;
                 const selectedOption = motorSelect.options[motorSelect.selectedIndex];
                 const motorPhase = selectedOption ? selectedOption.getAttribute('data-phase') : 
@@ -796,26 +764,18 @@
                     ratedCurrent = (motorPowerKW * 1000) / (voltage * pf * efficiency);
                 }
                 
-                // حساب تيار البدء (5-7 أضعاف التيار الاسمي)
                 const startingCurrent = ratedCurrent * 6;
-                
-                // حساب الطاقة اليومية المطلوبة (كيلوواط ساعة)
-                const dailyEnergy = motorPowerKW * operatingHours * 1.3; // إضافة 30% فقدان
-                
-                // حساب عدد الألواح الشمسية
+                const dailyEnergy = motorPowerKW * operatingHours * 1.3;
                 const panelsCount = Math.ceil((dailyEnergy * 1000) / (panelWattage * sunHours));
                 
-                // حساب سعة البطارية إذا طلب المستخدم
                 let batteryCapacity = 'لا حاجة';
                 if (batteryDays > 0) {
-                    const batteryAh = (dailyEnergy * 1000 * batteryDays) / (batteryVoltage * 0.8); // 0.8 لتفريغ 80%
+                    const batteryAh = (dailyEnergy * 1000 * batteryDays) / (batteryVoltage * 0.8);
                     batteryCapacity = `${Math.ceil(batteryAh)}Ah (نظام ${batteryVoltage}V)`;
                 }
                 
-                // حساب قدرة العاكس المطلوبة (1.5 ضعف قدرة الموتور للتعامل مع تيار البدء)
                 const inverterSizeKW = motorPowerKW * 1.5;
                 
-                // ملاحظات إضافية
                 let notes = '';
                 if (motorPowerKW > 5) {
                     notes = 'للموتورات الكبيرة (>5 كيلوواط)، يفضل استخدام VFD أو بدء نجمي-مثلث لتقليل تيار البدء. ';
@@ -827,7 +787,6 @@
                     notes += 'هذا الموتور أحادي الطور (1 فاز).';
                 }
                 
-                // عرض النتائج
                 document.getElementById('dailyEnergy').textContent = `${dailyEnergy.toFixed(2)} كيلوواط ساعة/يوم`;
                 document.getElementById('ratedCurrent').textContent = `${ratedCurrent.toFixed(2)}A`;
                 document.getElementById('startingCurrent').textContent = `${startingCurrent.toFixed(2)}A (تقريبي)`;
@@ -836,10 +795,7 @@
                 document.getElementById('inverterSize').textContent = `${inverterSizeKW.toFixed(2)}kW (${motorPhase === 'three' ? 'ثلاثي الطور' : 'أحادي الطور'})`;
                 document.getElementById('notes').textContent = notes;
                 
-                // إظهار قسم النتائج
                 document.getElementById('resultsSection').style.display = 'block';
-                
-                // التمرير إلى قسم النتائج
                 document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
             }
             
